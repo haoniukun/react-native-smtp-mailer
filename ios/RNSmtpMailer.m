@@ -18,6 +18,7 @@ RCT_EXPORT_METHOD(sendMail:(NSDictionary *)obj resolver:(RCTPromiseResolveBlock)
     NSString *password = [RCTConvert NSString:obj[@"password"]];
     NSString *fromEmail = [RCTConvert NSString:obj[@"from"]];
     NSString *recipients = [RCTConvert NSString:obj[@"recipients"]];
+    NSString *replyTos = [RCTConvert NSString:obj[@"replyTo"]];
     NSString *subject = [RCTConvert NSString:obj[@"subject"]];
     NSString *body = [RCTConvert NSString:obj[@"htmlBody"]];
     NSArray *attachmentPaths = [RCTConvert NSArray:obj[@"attachmentPaths"]];
@@ -38,8 +39,10 @@ RCT_EXPORT_METHOD(sendMail:(NSDictionary *)obj resolver:(RCTPromiseResolveBlock)
                                                 mailbox:fromEmail];
     MCOAddress *to = [MCOAddress addressWithDisplayName:nil
                                               mailbox:recipients];
+    MCOAddress *replyTo = [MCOAddress addressWithDisplayName:nil mailbox:replyTos];
     [[builder header] setFrom:from];
     [[builder header] setTo:@[to]];
+    [[builder header] setReplyTo:@[replyTo]];
     [[builder header] setSubject:subject];
     [builder setHTMLBody:body];
     int size = [attachmentPaths count];
